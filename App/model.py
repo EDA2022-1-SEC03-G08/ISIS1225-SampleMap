@@ -117,7 +117,10 @@ def newCatalog():
     Este indice crea un map cuya llave es el titulo del libro
     La columna 'title' del archivo books.csv
     """
-
+    catalog['titles'] = mp.newMap(10000,
+                                 maptype='PROBING',
+                                 loadfactor=0.5,
+                                 comparefunction=compareTitles)
     return catalog
 
 
@@ -171,6 +174,7 @@ def addBook(catalog, book):
     authors = book['authors'].split(",")  # Se obtienen los autores
     for author in authors:
         addBookAuthor(catalog, author.strip(), book)
+    addBookTitle(catalog, book)
     addBookYear(catalog, book)
 
 
@@ -261,12 +265,12 @@ def addBookTag(catalog, tag):
             lt.addLast(tagbook['value']['books'], book['value'])
 
 
-def addBookTitle(catalog, title):
+def addBookTitle(catalog, book):
     # TODO modificaciones para el laboratorio 6
     """
     Completar la descripcion de addBookTitle
     """
-    pass
+    mp.put(catalog['titles'], book['title'], book)
 
 
 # ==============================
@@ -310,8 +314,10 @@ def getBookByTitle(catalog, title):
     """
     Completar la descripcion de getBookByTitle
     """
-    pass
-
+    book = mp.get(catalog['titles'], title)
+    if book:
+        return me.getValue(book)
+    return None
 
 def booksSize(catalog):
     """
@@ -339,7 +345,7 @@ def titlesSize(catalog):
     """
     Completar la descripcion de titlesSize
     """
-    pass
+    return mp.size(catalog['titles'])
 
 
 # ==============================
@@ -431,4 +437,10 @@ def compareTitles(title1, title2):
     """
     Completar la descripcion de compareTitles
     """
-    pass
+    titlentry = me.getKey(title2)
+    if (title1 == titlentry):
+        return 0
+    elif (title1 > titlentry):
+        return 1
+    else:
+        return -1

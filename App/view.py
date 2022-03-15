@@ -109,12 +109,20 @@ def printBestBooks(books):
         print('No se encontraron libros.\n')
 
 
-def printBooksbyTitle(books):
+def printBooksbyTitle(book):
     # TODO modificaciones para el laboratorio 6
     """
     Completar la descripcion de printBooksbyTitle
     """
-    pass
+    if book:
+        print(' Se encontro: ')
+        print('Titulo: ' + book['title'] + '  ISBN: ' +
+                book['isbn'] + ' Rating: ' + book['average_rating'])
+        print("Autores:\n")
+        print(book["authors"])
+        print("\n")
+    else:
+        print('No se encontro el libro.\n')
 
 # Menu de opciones
 
@@ -127,6 +135,7 @@ def printMenu():
     print("4- Consultar los libros de un autor")
     print("5- Consultar los Libros por etiqueta")
     # TODO modificaciones para el laboratorio 6
+    print("6- Consultar Libro por titulo")
     # Agregar opcion para el nuevo indice
     print("0- Salir")
 
@@ -147,6 +156,7 @@ while True:
         print('Libros cargados: ' + str(controller.booksSize(ctrlr)))
         print('Autores cargados: ' + str(controller.authorsSize(ctrlr)))
         print('Géneros cargados: ' + str(controller.tagsSize(ctrlr)))
+        print('Titulos cargados: ' + str(controller.titlesSize(ctrlr)))
 
     elif int(inputs[0]) == 3:
         number = input("Buscando libros del año?: ")
@@ -165,7 +175,9 @@ while True:
 
     elif int(inputs[0]) == 6:
         # TODO modificaciones para el laboratorio 6
-        pass
+        title = input("Libro a buscar: ")
+        books = controller.getBookByTitle(ctrlr, title)
+        printBooksbyTitle(books)
 
     elif int(inputs[0]) == 0:
         break
